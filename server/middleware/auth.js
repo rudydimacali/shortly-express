@@ -21,13 +21,13 @@ module.exports.createSession = (req, res, next) => {
         next();
       } else {
         models.Sessions.create()
-        .then(({insertId})=> {
-          models.Sessions.get({id : insertId}).then(({hash}) => {
-            req.session = {hash : hash};
-            res.cookies = {shortlyid : {value : hash}}
-            next();
-          })
-        })
+          .then(({insertId})=> {
+            models.Sessions.get({id : insertId}).then(({hash}) => {
+              req.session = {hash: hash};
+              res.cookies = {shortlyid: {value : hash}};
+              next();
+            });
+          });
       }
     });
   }
@@ -37,3 +37,11 @@ module.exports.createSession = (req, res, next) => {
 // Add additional authentication middleware functions below
 /************************************************************/
 
+// VERIFY
+module.exports.verifyUser = (req, res, next) => {
+  if (!models.Sessions.isLoggedIn(req.session)) {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+};

@@ -14,18 +14,19 @@ app.set("view engine", "ejs");
 app.use(partials());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(CookieParser);
+app.use(CookieParser);
+app.use(Auth.createSession);
 app.use(express.static(path.join(__dirname, "../public")));
 
-app.get("/", Auth.createSession, (req, res) => {
+app.get("/", Auth.verifyUser, (req, res) => {
   res.render("index");
 });
 
-app.get("/create", (req, res) => {
+app.get("/create", Auth.verifyUser, (req, res) => {
   res.render("index");
 });
 
-app.get("/links", (req, res, next) => {
+app.get("/links", Auth.verifyUser, (req, res, next) => {
   models.Links.getAll()
     .then(links => {
       res.status(200).send(links);
@@ -84,10 +85,12 @@ app.get("/login", (req, res) => {
 // Write your authentication routes here
 /************************************************************/
 
-app.post("/signup", Auth.createSession, (req, res) => {
+app.post("/signup", (req, res, next) => {
   models.Users.create(req.body)
     .then(result => {
-      res.redirect("/");
+      models.Sessions.update({hash : req.session.hash}, {userId : result.insertId}).then(() => {
+        res.redirect("/");
+      });
     })
     .catch(err => {
       res.redirect("/signup");
@@ -99,7 +102,7 @@ app.post("/signup", Auth.createSession, (req, res) => {
   // RES.REDIRECT ('/')
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", (req, res, next) => {
   models.Users.get({ username: req.body.username }).then(result => {
     if (result) {
       models.Users.compare(req.body.password, result.password, result.salt)
@@ -110,6 +113,16 @@ app.post("/login", (req, res) => {
     }
   });
 });
+
+app.get('/logout', (req, res, next) => {
+  // console.log('logout request', req.headers.cookie);
+  return models.Sessions.delete({hash: req.cookies.shortlyid}).then(result => {
+    res.clearCookie('shortlyid');
+    res.setHeader('Set-Cookie', 'shortlyid=LOGGEDOUT');
+    res.redirect('/login');
+  });
+});
+
 
 /************************************************************/
 // Handle the code parameter route last - if all other routes fail

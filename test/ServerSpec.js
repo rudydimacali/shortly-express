@@ -633,6 +633,7 @@ describe("", function () {
           }
 
           var cookies = cookieJar.getCookies("http://127.0.0.1:4568/");
+          console.log(cookies);
           var newCookieValue = cookies[0].value;
           expect(cookieValue).to.not.equal(newCookieValue);
 
@@ -649,7 +650,7 @@ describe("", function () {
     });
   });
 
-  xdescribe("Privileged Access:", function () {
+  describe("Privileged Access:", function () {
     it("Redirects to login page if a user tries to access the main page and is not signed in", function (done) {
       request("http://127.0.0.1:4568/", function (error, res, body) {
         if (error) {
@@ -681,7 +682,7 @@ describe("", function () {
     });
   });
 
-  xdescribe("Link creation:", function () {
+  describe("Link creation:", function () {
     var cookies = request.jar();
     var requestWithSession = request.defaults({ jar: cookies });
     var options = {
