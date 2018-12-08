@@ -116,9 +116,8 @@ app.post("/login", (req, res, next) => {
 
 app.get('/logout', (req, res, next) => {
   // console.log('logout request', req.headers.cookie);
-  return models.Sessions.delete({hash: req.cookies.shortlyid}).then(result => {
+  return models.Sessions.delete({hash: req.cookies.shortlyid}).then(() => {
     res.clearCookie('shortlyid');
-    res.setHeader('Set-Cookie', 'shortlyid=LOGGEDOUT');
     res.redirect('/login');
   });
 });

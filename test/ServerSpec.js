@@ -63,7 +63,7 @@ describe("", function () {
     });
   });
 
-  xdescribe("Database Schema:", function () {
+  describe("Database Schema:", function () {
     it("contains a users table", function (done) {
       var queryString = "SELECT * FROM users";
       db.query(queryString, function (err, results) {
@@ -131,7 +131,7 @@ describe("", function () {
     });
   });
 
-  xdescribe("Account Creation:", function () {
+  describe("Account Creation:", function () {
     it("signup creates a new user record", function (done) {
       var options = {
         method: "POST",
@@ -228,7 +228,7 @@ describe("", function () {
     });
   });
 
-  xdescribe("Account Login:", function () {
+  describe("Account Login:", function () {
     beforeEach(function (done) {
       var options = {
         method: "POST",
@@ -302,7 +302,7 @@ describe("", function () {
     });
   });
 
-  xdescribe("Sessions Schema:", function () {
+  describe("Sessions Schema:", function () {
     it("contains a sessions table", function (done) {
       var queryString = "SELECT * FROM sessions";
       db.query(queryString, function (err, results) {
@@ -373,7 +373,7 @@ describe("", function () {
     });
   });
 
-  xdescribe("Express Middleware", function () {
+  describe("Express Middleware", function () {
     var cookieParser = require("../server/middleware/cookieParser.js");
     var createSession = require("../server/middleware/auth.js").createSession;
 
@@ -594,9 +594,7 @@ describe("", function () {
           return done(err);
         }
         var cookies = cookieJar.getCookies("http://127.0.0.1:4568/");
-        // console.log(cookies);
         var cookieValue = cookies[0].value;
-        // console.log(cookieValue);
 
         var queryString = `
           SELECT users.username FROM users, sessions
@@ -608,7 +606,6 @@ describe("", function () {
             return done(error);
           }
           var user = users[0];
-          // console.log(users);
           expect(user.username).to.equal("Vivian");
           done();
         });
@@ -633,9 +630,8 @@ describe("", function () {
           }
 
           var cookies = cookieJar.getCookies("http://127.0.0.1:4568/");
-          console.log(cookies);
-          var newCookieValue = cookies[0].value;
-          expect(cookieValue).to.not.equal(newCookieValue);
+          var newCookieValue = cookies[0];
+          expect(newCookieValue).to.equal(undefined);
 
           var queryString = "SELECT * FROM sessions WHERE hash = ?";
           db.query(queryString, cookieValue, function (error2, sessions) {
