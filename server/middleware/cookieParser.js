@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const Sessions = require('../models/session.js');
 
 const parseCookies = (req, res, next) => {
   if (req.headers.cookie) {

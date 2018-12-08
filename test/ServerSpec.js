@@ -438,7 +438,7 @@ describe("", function () {
       it("sets a new cookie on the response when a session is initialized", function (done) {
         var requestWithoutCookie = httpMocks.createRequest();
         var response = httpMocks.createResponse();
-
+        
         createSession(requestWithoutCookie, response, function () {
           var cookies = response.cookies;
           expect(cookies["shortlyid"]).to.exist;
