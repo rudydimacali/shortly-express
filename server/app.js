@@ -4,6 +4,7 @@ const utils = require("./lib/hashUtils");
 const partials = require("express-partials");
 const bodyParser = require("body-parser");
 const Auth = require("./middleware/auth");
+const CookieParser = require("./middleware/cookieParser");
 const models = require("./models");
 
 const app = express();
@@ -13,9 +14,10 @@ app.set("view engine", "ejs");
 app.use(partials());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(CookieParser);
 app.use(express.static(path.join(__dirname, "../public")));
 
-app.get("/", (req, res) => {
+app.get("/", Auth.createSession, (req, res) => {
   res.render("index");
 });
 
@@ -82,7 +84,7 @@ app.get("/login", (req, res) => {
 // Write your authentication routes here
 /************************************************************/
 
-app.post("/signup", (req, res) => {
+app.post("/signup", Auth.createSession, (req, res) => {
   models.Users.create(req.body)
     .then(result => {
       res.redirect("/");

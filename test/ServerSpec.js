@@ -63,7 +63,7 @@ describe("", function () {
     });
   });
 
-  describe("Database Schema:", function () {
+  xdescribe("Database Schema:", function () {
     it("contains a users table", function (done) {
       var queryString = "SELECT * FROM users";
       db.query(queryString, function (err, results) {
@@ -131,7 +131,7 @@ describe("", function () {
     });
   });
 
-  describe("Account Creation:", function () {
+  xdescribe("Account Creation:", function () {
     it("signup creates a new user record", function (done) {
       var options = {
         method: "POST",
@@ -228,7 +228,7 @@ describe("", function () {
     });
   });
 
-  describe("Account Login:", function () {
+  xdescribe("Account Login:", function () {
     beforeEach(function (done) {
       var options = {
         method: "POST",
@@ -302,7 +302,7 @@ describe("", function () {
     });
   });
 
-  describe("Sessions Schema:", function () {
+  xdescribe("Sessions Schema:", function () {
     it("contains a sessions table", function (done) {
       var queryString = "SELECT * FROM sessions";
       db.query(queryString, function (err, results) {
@@ -373,7 +373,7 @@ describe("", function () {
     });
   });
 
-  describe("Express Middleware", function () {
+  xdescribe("Express Middleware", function () {
     var cookieParser = require("../server/middleware/cookieParser.js");
     var createSession = require("../server/middleware/auth.js").createSession;
 
@@ -537,7 +537,7 @@ describe("", function () {
     });
   });
 
-  xdescribe("Sessions and cookies", function () {
+  describe("Sessions and cookies", function () {
     var requestWithSession;
     var cookieJar;
 
@@ -594,7 +594,9 @@ describe("", function () {
           return done(err);
         }
         var cookies = cookieJar.getCookies("http://127.0.0.1:4568/");
+        // console.log(cookies);
         var cookieValue = cookies[0].value;
+        // console.log(cookieValue);
 
         var queryString = `
           SELECT users.username FROM users, sessions
@@ -606,6 +608,7 @@ describe("", function () {
             return done(error);
           }
           var user = users[0];
+          // console.log(users);
           expect(user.username).to.equal("Vivian");
           done();
         });
