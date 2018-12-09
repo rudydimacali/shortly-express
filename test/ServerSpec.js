@@ -630,8 +630,8 @@ describe("", function () {
           }
 
           var cookies = cookieJar.getCookies("http://127.0.0.1:4568/");
-          var newCookieValue = cookies[0];
-          expect(newCookieValue).to.equal(undefined);
+          var newCookieValue = cookies[0].value;
+          expect(cookieValue).to.not.equal(newCookieValue);
 
           var queryString = "SELECT * FROM sessions WHERE hash = ?";
           db.query(queryString, cookieValue, function (error2, sessions) {

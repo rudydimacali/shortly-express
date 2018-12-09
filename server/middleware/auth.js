@@ -6,7 +6,7 @@ module.exports.createSession = (req, res, next) => {
     models.Sessions.create().then(({insertId}) => {
       models.Sessions.get({id: insertId}).then(({hash}) => {
         req.session = {hash: hash};
-        res.cookies = {shortlyid : {value : hash}};
+        res.cookie('shortlyid', hash);
         res.setHeader('Set-Cookie', `shortlyid=${hash}`);
         next();
       });
@@ -24,7 +24,7 @@ module.exports.createSession = (req, res, next) => {
           .then(({insertId})=> {
             models.Sessions.get({id : insertId}).then(({hash}) => {
               req.session = {hash: hash};
-              res.cookies = {shortlyid: {value : hash}};
+              res.cookie('shortlyid', hash);
               next();
             });
           });
